@@ -39,6 +39,10 @@ impl Ball {
         self.vx = vx;
     }
 
+    pub fn vy(&self) -> i32 {
+        self.vy
+    }
+
     pub fn set_vy(&mut self, vy: i32) {
         self.vy = vy;
     }
@@ -56,9 +60,16 @@ impl Ball {
         }
     }
 
-    pub fn is_outside(&self) -> bool {
+    pub fn is_outside_left(&self) -> bool {
+        if self.x < 0 {
+            return true;
+        }
+        false
+    }
+
+    pub fn is_outside_right(&self) -> bool {
         let (width, _) = SCREEN_SIZE;
-        if self.x < 0 || self.x > width as i32 - CELL_SIZE {
+        if self.x > width as i32 - CELL_SIZE {
             return true;
         }
         false
