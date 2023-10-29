@@ -30,6 +30,29 @@ impl Paddle {
         ]
     }
 
+    pub fn first_position(&self) -> (i32, i32) {
+        let first = self.pad()[0];
+        (first.x(), first.y())
+    }
+
+    pub fn last_position(&self) -> (i32, i32) {
+        let last_index = self.pad().len() - 1;
+        let last = self.pad()[last_index];
+        (last.x(), last.y())
+    }
+
+    pub fn position(&self) -> (i32, i32) {
+        (self.x, self.y)
+    }
+
+    pub fn set_x(&mut self, x: i32) {
+        self.x = x;
+    }
+
+    pub fn set_y(&mut self, y: i32) {
+        self.y = y;
+    }
+
     pub fn move_up(&mut self) {
         self.y -= CELL_SIZE;
     }
