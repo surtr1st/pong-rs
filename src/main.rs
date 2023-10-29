@@ -1,6 +1,6 @@
 pub mod constants;
 pub mod paddle;
-use constants::{SCREEN_SIZE, TITLE};
+use constants::{CELL_SIZE, SCREEN_SIZE, TITLE};
 use paddle::Paddle;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
@@ -20,7 +20,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
 
     let mut canvas = window.into_canvas().build()?;
-    let mut player1 = Paddle::new(0, 0);
+    let mut player1 = Paddle::new(25, 0);
+    let mut player2 = Paddle::new(width as i32 - (CELL_SIZE * 2), 0);
 
     canvas.clear();
     canvas.present();
@@ -35,16 +36,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     ..
                 } => match keycode {
                     Keycode::Q => break 'running,
-                    Keycode::A => player1.move_up(),
-                    Keycode::D => player1.move_down(),
+                    Keycode::W => player1.move_up(),
+                    Keycode::S => player1.move_down(),
+                    Keycode::Up => player2.move_up(),
+                    Keycode::Down => player2.move_down(),
                     _ => {}
                 },
                 _ => {}
             }
         }
 
+        resolve_overflow(&mut player1);
+        resolve_overflow(&mut player2);
+
         canvas.set_draw_color(Color::WHITE);
         canvas.fill_rects(&player1.pad())?;
+
+        canvas.set_draw_color(Color::WHITE);
+        canvas.fill_rects(&player2.pad())?;
 
         canvas.set_draw_color(Color::BLACK);
         canvas.present();
@@ -52,4 +61,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     Ok(())
+}
+
+fn resolve_overflow(target: &mut Paddle) {
+    let (_, y) = target.position();
+    let (_, fy) = target.first_position();
+    let (_, ly) = target.last_position();
+    let (_, height) = SCREEN_SIZE;
+
+    let y0 = y + (height as i32 / 2) - (CELL_SIZE * 2);
+
+    if fy < 0 {
+        target.set_y(y0 * 10);
+    }
+
+    if ly > (height as i32) - CELL_SIZE {
+        target.set_y((y0 / 2) - 12);
+    }
 }
