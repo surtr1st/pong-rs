@@ -29,6 +29,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut event_pump = sdl_context.event_pump()?;
     'running: loop {
         canvas.clear();
+
         for event in event_pump.poll_iter() {
             match event {
                 Event::KeyDown {
@@ -36,6 +37,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     ..
                 } => match keycode {
                     Keycode::Q => break 'running,
+                    Keycode::W => player1.move_up(),
+                    Keycode::S => player1.move_down(),
+                    Keycode::Up => player2.move_up(),
+                    Keycode::Down => player2.move_down(),
+                    _ => {}
+                },
+                Event::KeyUp {
+                    keycode: Some(keycode),
+                    ..
+                } => match keycode {
                     Keycode::W => player1.move_up(),
                     Keycode::S => player1.move_down(),
                     Keycode::Up => player2.move_up(),
