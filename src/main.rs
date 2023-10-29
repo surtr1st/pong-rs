@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap();
 
     let mut canvas = window.into_canvas().build()?;
-    let player1 = Paddle::new(0, 0);
+    let mut player1 = Paddle::new(0, 0);
 
     canvas.clear();
     canvas.present();
@@ -35,6 +35,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     ..
                 } => match keycode {
                     Keycode::Q => break 'running,
+                    Keycode::A => player1.move_up(),
+                    Keycode::D => player1.move_down(),
                     _ => {}
                 },
                 _ => {}

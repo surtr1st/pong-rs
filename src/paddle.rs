@@ -29,4 +29,12 @@ impl Paddle {
             Rect::new(self.x, y4, size, size),
         ]
     }
+
+    pub fn move_up(&mut self) {
+        self.y -= CELL_SIZE;
+    }
+
+    pub fn move_down(&mut self) {
+        self.y += CELL_SIZE;
+    }
 }
