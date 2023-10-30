@@ -12,33 +12,14 @@ impl Paddle {
         Paddle { x, y }
     }
 
-    pub fn pad(&self) -> Vec<Rect> {
+    pub fn pad(&self) -> Rect {
         let size = CELL_SIZE as u32;
 
         let (_, height) = SCREEN_SIZE;
 
-        let y1 = self.y + (height as i32 / 2) - (CELL_SIZE * 2);
-        let y2 = self.y + (height as i32 / 2) - CELL_SIZE;
-        let y3 = self.y + (height as i32 / 2);
-        let y4 = self.y + CELL_SIZE + (height as i32 / 2);
+        let y = self.y + (height as i32 / 2) - (CELL_SIZE * 5);
 
-        vec![
-            Rect::new(self.x, y1, size, size),
-            Rect::new(self.x, y2, size, size),
-            Rect::new(self.x, y3, size, size),
-            Rect::new(self.x, y4, size, size),
-        ]
-    }
-
-    pub fn first_position(&self) -> (i32, i32) {
-        let first = self.pad()[0];
-        (first.x(), first.y())
-    }
-
-    pub fn last_position(&self) -> (i32, i32) {
-        let last_index = self.pad().len() - 1;
-        let last = self.pad()[last_index];
-        (last.x(), last.y())
+        Rect::new(self.x, y, size, size * 10)
     }
 
     pub fn position(&self) -> (i32, i32) {
@@ -54,10 +35,10 @@ impl Paddle {
     }
 
     pub fn move_up(&mut self) {
-        self.y -= CELL_SIZE;
+        self.y -= CELL_SIZE * 2;
     }
 
     pub fn move_down(&mut self) {
-        self.y += CELL_SIZE;
+        self.y += CELL_SIZE * 2;
     }
 }
