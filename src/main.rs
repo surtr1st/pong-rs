@@ -103,10 +103,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         canvas.fill_rect(ball.ball())?;
 
         canvas.set_draw_color(Color::WHITE);
-        canvas.fill_rects(&player1.pad())?;
+        canvas.fill_rect(player1.pad())?;
 
         canvas.set_draw_color(Color::WHITE);
-        canvas.fill_rects(&player2.pad())?;
+        canvas.fill_rect(player2.pad())?;
 
         canvas.set_draw_color(Color::BLACK);
         canvas.present();
@@ -118,28 +118,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn resolve_overflow(target: &mut Paddle) {
     let (_, y) = target.position();
-    let (_, fy) = target.first_position();
-    let (_, ly) = target.last_position();
     let (_, height) = SCREEN_SIZE;
 
-    let y0 = y + (height as i32 / 2) - (CELL_SIZE * 2);
+    let y0 = (height as i32 / 2) - (CELL_SIZE * 5);
 
-    if fy < 0 {
-        target.set_y(y0 * 10);
+    if y <= -y0 {
+        target.set_y(-y0);
     }
 
-    if ly > (height as i32) - CELL_SIZE {
-        target.set_y((y0 / 2) - 12);
+    if y > y0 {
+        target.set_y(y0);
     }
 }
 
 fn bounce(paddle: &mut Paddle, ball: &mut Ball) {
-    for i in 0..paddle.pad().len() {
-        let part = paddle.pad()[i];
-        if detect_collision(&ball.ball(), &part) {
-            ball.set_vx(-ball.vx());
-            ball.x += ball.vx();
-        }
+    if detect_collision(&ball.ball(), &paddle.pad()) {
+        ball.set_vx(-ball.vx());
+        ball.x += ball.vx();
     }
 }
 
